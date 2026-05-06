@@ -20,6 +20,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => res.json({ message: 'LokShiksha API running' }));
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/courses', require('./routes/courseRoutes'));
 
 require('./socket/chat')(io);
 
