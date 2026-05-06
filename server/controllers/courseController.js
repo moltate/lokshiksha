@@ -124,3 +124,19 @@ exports.getMyCourses = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+exports.enrollCourse = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id)
+    if (!course) {
+      return res.status(404).json({ message: 'Course nahi mila' })
+    }
+    if (course.studentsEnrolled.includes(req.user._id)) {
+      return res.status(400).json({ message: 'Already enrolled ho' })
+    }
+    course.studentsEnrolled.push(req.user._id)
+    await course.save()
+    res.json({ message: 'Successfully enrolled!' })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+};
