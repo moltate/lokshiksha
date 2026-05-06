@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { useAuth } from '../context/AuthContext'
 
 export default function Register() {
   const navigate = useNavigate()
+  const { login } = useAuth()
   const [formData, setFormData] = useState({
     name: '', email: '', password: '', role: 'student'
   })
@@ -19,8 +21,7 @@ export default function Register() {
     setLoading(true)
     try {
       const res = await axios.post('http://localhost:5000/api/auth/register', formData)
-      localStorage.setItem('token', res.data.token)
-      localStorage.setItem('user', JSON.stringify(res.data.user))
+      login(res.data.user, res.data.token)
       toast.success('Account ban gaya!')
       navigate('/')
     } catch (err) {
@@ -35,7 +36,6 @@ export default function Register() {
       <div className="bg-white rounded-2xl shadow-md p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">LokShiksha</h2>
         <h3 className="text-xl font-semibold text-gray-700 mb-6">Account Banao</h3>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">Naam</label>
@@ -49,7 +49,6 @@ export default function Register() {
               placeholder="Tumhara naam"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">Email</label>
             <input
@@ -62,7 +61,6 @@ export default function Register() {
               placeholder="apna@email.com"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">Password</label>
             <input
@@ -75,7 +73,6 @@ export default function Register() {
               placeholder="••••••"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">Main hoon</label>
             <select
@@ -88,7 +85,6 @@ export default function Register() {
               <option value="teacher">Teacher — Sikhana chahta hoon</option>
             </select>
           </div>
-
           <button
             type="submit"
             disabled={loading}
@@ -97,7 +93,6 @@ export default function Register() {
             {loading ? 'Loading...' : 'Register Karo'}
           </button>
         </form>
-
         <p className="text-center text-gray-500 mt-4">
           Pehle se account hai?{' '}
           <Link to="/login" className="text-blue-600 font-semibold">Login karo</Link>
