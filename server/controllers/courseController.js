@@ -140,3 +140,50 @@ exports.enrollCourse = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message })
   }
 };
+
+const Review = require('../models/Review');
+
+// GET - Course ke reviews
+exports.getCourseReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find({ course: req.params.id })
+      .populate('user', 'name')
+      .sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// POST - Review do
+exports.addReview = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id);
+    if (!course) return res.status(404).json({ message: 'Course nahi mila' });
+
+    const alreadyReviewed = await Review.findOne({
+      course: req.params.id,
+      user: req.user._id
+    });
+    if (alreadyReviewed) {
+      return res.status(400).json({ message: 'Pehle se review de chuke ho' });
+    }
+
+    const review = await Review.create({
+      course: req.params.id,
+      user: req.user._id,
+      rating: req.body.rating,
+      text: req.body.text
+    });
+
+    // Average rating update karo
+    const allReviews = await Review.find({ course: req.params.id });
+    const avg = allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
+    course.rating = { average: avg, count: allReviews.length };
+    await course.save();
+
+    res.status(201).json(review);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
