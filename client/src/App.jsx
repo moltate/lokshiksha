@@ -3,10 +3,10 @@ import { AuthProvider } from './context/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import { Toaster } from 'react-hot-toast'
-import Dashboard from './pages/Dashboard'
 import Courses from './pages/Courses'
 import CourseDetail from './pages/CourseDetail'
+import Dashboard from './pages/Dashboard'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
@@ -17,9 +17,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:id" element={<CourseDetail />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
