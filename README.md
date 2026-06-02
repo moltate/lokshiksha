@@ -198,7 +198,3 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 - GitHub: [@moltate](https://github.com/moltate)
 
 ---
-
-<div align="center">
-  Built with ❤️ for Malegaon and every city that deserves better access to education.
-</div>
